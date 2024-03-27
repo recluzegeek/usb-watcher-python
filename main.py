@@ -12,12 +12,12 @@ monitor = USBMonitor()
 device_info_str = lambda device_info: ', '.join(f"{key}: {value}" for key, value in device_info.items())
 
 # Email settings
-smtp_server = 'smtp.example.com'
+smtp_server = 'smtp.gmail.com'
 smtp_port = 587
-username = 'username@example.com'
-password = 'password'
-from_email = 'from@example.com'
-to_email = 'to@example.com'
+# username = ''
+app_secret = ''
+from_email = ''
+to_email = ''
 
 
 def send_email(subject, message):
@@ -29,7 +29,7 @@ def send_email(subject, message):
 
     server = smtplib.SMTP(smtp_server, smtp_port)
     server.starttls()
-    server.login(username, password)
+    server.login(from_email, app_secret)
     text = msg.as_string()
     server.sendmail(from_email, to_email, text)
     server.quit()
@@ -44,12 +44,12 @@ def get_device_type(device_info):
 on_connect = lambda device_id, device_info: (
     print(
         f"Connected: {device_id} ({get_device_type(device_info=device_info)})\n{device_info_str(device_info=device_info)}"),
-    # send_email('USB Connected', f"Connected: {device_info_str(device_info=device_info)}")
+    send_email('🚨🔔 USB Connected', f"Connected: {device_info_str(device_info=device_info)}")
 )
 on_disconnect = lambda device_id, device_info: (
     print(
         f"Disconnected: {device_id} ({get_device_type(device_info=device_info)})\n{device_info_str(device_info=device_info)}"),
-    # send_email('USB Disconnected', f"Disconnected: {device_info_str(device_info=device_info)}")
+    send_email('🚨🔔 USB Disconnected', f"Disconnected: {device_info_str(device_info=device_info)}")
 )
 
 
